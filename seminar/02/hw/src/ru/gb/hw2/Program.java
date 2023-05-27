@@ -37,6 +37,9 @@ public class Program {
         System.out.println();
     }
 
+    /**
+     * Отрисовка разделяющей строки
+     */
     private static void printDelimiter() {
         System.out.print(" ─");
         for (int i = 0; i <= fieldSizeX; i++ ) {
