@@ -4,18 +4,15 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Program {
-    private static final int WIN_COUNT = 4;
+    private static final int WIN_COUNT = 5;
     private static final char DOT_HUMAN = 'X';
     private static final char DOT_AI = 'O';
     private static final char DOT_EMPTY = ' ';
     private static char[][] field;
-
     private static final int fieldSizeX = 10;
     private static final int fieldSizeY = 6;
-
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final Random random = new Random();
-
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
 
@@ -82,7 +79,6 @@ public class Program {
     private static void printField() {
         printHeader();
         printDelimiter();
-
         for (int y = 0; y < fieldSizeY; y ++) {
             System.out.print(y + 1 + " ");
             for (int x = 0; x <= fieldSizeX; x ++) {
@@ -92,7 +88,6 @@ public class Program {
             System.out.println(y + 1);
             printDelimiter();
         }
-
         printHeader();
     }
 
@@ -104,7 +99,6 @@ public class Program {
     private static void printField(int xColor, int yColor) {
         printHeader();
         printDelimiter();
-
         for (int y = 0; y < fieldSizeY; y ++) {
             System.out.print(y + 1 + " ");
             for (int x = 0; x <= fieldSizeX; x ++) {
@@ -115,7 +109,6 @@ public class Program {
             System.out.println(y + 1);
             printDelimiter();
         }
-
         printHeader();
     }
 
@@ -163,16 +156,15 @@ public class Program {
      * @param c - символ, проверяемый на выйгрыш
      * @return
      */
-    private static boolean rightUpWinCheck(int x, int y, char c) {
-        if (fieldSizeX - x < WIN_COUNT)     return false;   // если вправо клеток не достаточно
-        if (y - WIN_COUNT < -1)             return false;   // если вверх клеток не достаточно
+    private static boolean rightUpWinCheck(int x, int y, char c, int winCount) {
+        if (fieldSizeX - x < winCount)     return false;   // если вправо клеток не достаточно
+        if (y - winCount < -1)             return false;   // если вверх клеток не достаточно
 
         int j = y;
-        for (int i = x; i < x + WIN_COUNT; i++) {
+        for (int i = x; i < x + winCount; i++) {
           if (field[i][j] != c)   return false;
           j--;
         }
-
         return true;
     }
 
@@ -183,10 +175,10 @@ public class Program {
      * @param c - символ, проверяемый на выйгрыш
      * @return
      */
-    private static boolean rightWinCheck(int x, int y, char c) {
-        if (fieldSizeX - x < WIN_COUNT)     return false;   // если вправо клеток не достаточно
+    private static boolean rightWinCheck(int x, int y, char c, int winCount) {
+        if (fieldSizeX - x < winCount)     return false;   // если вправо клеток не достаточно
 
-        for (int i = x; i < x + WIN_COUNT; i++) {
+        for (int i = x; i < x + winCount; i++) {
             if (field[i][y] != c)   return false;
         }
         return true;
@@ -199,16 +191,15 @@ public class Program {
      * @param c - символ, проверяемый на выйгрыш
      * @return
      */
-    private static boolean rightDownWinCheck(int x, int y, char c) {
-        if (fieldSizeX - x < WIN_COUNT)     return false;   // если вправо клеток не достаточно
-        if (fieldSizeY - y < WIN_COUNT)     return false;   // если вниз клеток не достаточно
+    private static boolean rightDownWinCheck(int x, int y, char c, int winCount) {
+        if (fieldSizeX - x < winCount)     return false;   // если вправо клеток не достаточно
+        if (fieldSizeY - y < winCount)     return false;   // если вниз клеток не достаточно
 
         int j = y;
-        for (int i = x; i < x + WIN_COUNT; i++) {
+        for (int i = x; i < x + winCount; i++) {
             if (field[i][j] != c)   return false;
             j++;
         }
-
         return true;
     }
 
@@ -219,14 +210,15 @@ public class Program {
      * @param c - символ, проверяемый на выйгрыш
      * @return
      */
-    private static boolean downWinCheck(int x, int y, char c) {
-        if (fieldSizeY - y < WIN_COUNT)     return false;   // если вниз клеток не достаточно
+    private static boolean downWinCheck(int x, int y, char c, int winCount) {
+        if (fieldSizeY - y < winCount)     return false;   // если вниз клеток не достаточно
 
-        for (int i = y; i < y + WIN_COUNT; i++) {
+        for (int i = y; i < y + winCount; i++) {
             if (field[x][i] != c)   return false;
         }
         return true;
     }
+
     /**
      * Проверка наличия выйгрыша
      * @param c - символ, проверяемый на выйгрыш
@@ -235,10 +227,10 @@ public class Program {
     private static boolean checkWin(char c) {
         for (int i = 0; i < fieldSizeX; i++) {
             for (int j = 0; j < fieldSizeY; j++) {
-                if (rightWinCheck(i, j, c))     return true;
-                if (downWinCheck(i, j, c))      return true;
-                if (rightUpWinCheck(i, j, c))   return true;
-                if (rightDownWinCheck(i, j, c)) return true;
+                if (rightWinCheck(i, j, c, WIN_COUNT))     return true;
+                if (downWinCheck(i, j, c, WIN_COUNT))      return true;
+                if (rightUpWinCheck(i, j, c, WIN_COUNT))   return true;
+                if (rightDownWinCheck(i, j, c, WIN_COUNT)) return true;
             }
         }
         return false;
@@ -271,7 +263,6 @@ public class Program {
             System.out.println("Ничья!");
             return true;
         }
-
         return false; // Игра продолжается
     }
 
@@ -279,17 +270,91 @@ public class Program {
      * Ход компьютера
      * @return возвращает массив с координатой хода [0] - x, [1] - y
      */
+//    private static int[] aiTurn() {
+//        int x, y;
+//        do
+//        {
+//            x = random.nextInt(fieldSizeX);
+//            y = random.nextInt(fieldSizeY);
+//        }
+//        while (!isCellEmpty(x, y));
+//        field[x][y] = DOT_AI;
+//        return new int[]{x, y};
+//    }
+
+    /**
+     * Ход компьютера
+     * @return возвращает массив с координатой хода [0] - x, [1] - y
+     */
     private static int[] aiTurn() {
-        int x, y;
+        int[] coordinate;
+        coordinate = forecastCheckWin(DOT_AI, WIN_COUNT);
+        if (coordinate != null) {
+            field[coordinate[0]][coordinate[1]] = DOT_AI;
+            return new int[]{coordinate[0], coordinate[1]};
+        }
+
+        coordinate = forecastCheckWin(DOT_HUMAN, WIN_COUNT);
+        if (coordinate != null) {
+            field[coordinate[0]][coordinate[1]] = DOT_AI;
+            return new int[]{coordinate[0], coordinate[1]};
+        }
+
+        coordinate = forecastCheckWin(DOT_HUMAN, WIN_COUNT - 1);
+        if (coordinate != null) {
+            field[coordinate[0]][coordinate[1]] = DOT_AI;
+            return new int[]{coordinate[0], coordinate[1]};
+        }
+
+        coordinate = forecastCheckWin(DOT_AI, WIN_COUNT - 1);
+        if (coordinate != null) {
+            field[coordinate[0]][coordinate[1]] = DOT_AI;
+            return new int[]{coordinate[0], coordinate[1]};
+        }
+
+        coordinate = forecastCheckWin(DOT_HUMAN, WIN_COUNT - 2);
+        if (coordinate != null) {
+            field[coordinate[0]][coordinate[1]] = DOT_AI;
+            return new int[]{coordinate[0], coordinate[1]};
+        }
+
+        coordinate = new int[2];
         do
         {
-            x = random.nextInt(fieldSizeX);
-            y = random.nextInt(fieldSizeY);
+            coordinate[0] = random.nextInt(fieldSizeX);
+            coordinate[1] = random.nextInt(fieldSizeY);
         }
-        while (!isCellEmpty(x, y));
-        field[x][y] = DOT_AI;
-//        System.out.println("Ход ИИ:");
-//        printField(x, y);
-        return new int[]{x, y};
+        while (!isCellEmpty(coordinate[0], coordinate[1]));
+
+        field[coordinate[0]][coordinate[1]] = DOT_AI;
+        return new int[]{coordinate[0], coordinate[1]};
+    }
+
+    private static int[] forecastCheckWin(char c, int winCount) {
+        for (int i = 0; i < fieldSizeX; i++) {
+            for (int j = 0; j < fieldSizeY; j++) {
+                if (field[i][j] == DOT_EMPTY) {
+                    field[i][j] = c;
+                    if (checkWin(c, winCount)) {
+                        field[i][j] = DOT_EMPTY;
+                        return new int[]{i, j};
+                    }
+                    field[i][j] = DOT_EMPTY;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean checkWin(char c, int winCount) {
+        for (int i = 0; i < fieldSizeX; i++) {
+            for (int j = 0; j < fieldSizeY; j++) {
+                if (rightWinCheck(i, j, c, winCount))     return true;
+                if (downWinCheck(i, j, c, winCount))      return true;
+                if (rightUpWinCheck(i, j, c, winCount))   return true;
+                if (rightDownWinCheck(i, j, c, winCount)) return true;
+            }
+        }
+        return false;
     }
 }
