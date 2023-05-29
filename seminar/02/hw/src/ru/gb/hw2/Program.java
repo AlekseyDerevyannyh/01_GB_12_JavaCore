@@ -157,8 +157,8 @@ public class Program {
      * @return
      */
     private static boolean rightUpWinCheck(int x, int y, char c, int winCount) {
-        if (fieldSizeX - x < winCount)     return false;   // если вправо клеток не достаточно
-        if (y - winCount < -1)             return false;   // если вверх клеток не достаточно
+        if (fieldSizeX - x < WIN_COUNT)     return false;   // если вправо клеток не достаточно
+        if (y - WIN_COUNT < -1)             return false;   // если вверх клеток не достаточно
 
         int j = y;
         for (int i = x; i < x + winCount; i++) {
@@ -176,7 +176,7 @@ public class Program {
      * @return
      */
     private static boolean rightWinCheck(int x, int y, char c, int winCount) {
-        if (fieldSizeX - x < winCount)     return false;   // если вправо клеток не достаточно
+        if (fieldSizeX - x < WIN_COUNT)     return false;   // если вправо клеток не достаточно
 
         for (int i = x; i < x + winCount; i++) {
             if (field[i][y] != c)   return false;
@@ -192,8 +192,8 @@ public class Program {
      * @return
      */
     private static boolean rightDownWinCheck(int x, int y, char c, int winCount) {
-        if (fieldSizeX - x < winCount)     return false;   // если вправо клеток не достаточно
-        if (fieldSizeY - y < winCount)     return false;   // если вниз клеток не достаточно
+        if (fieldSizeX - x < WIN_COUNT)     return false;   // если вправо клеток не достаточно
+        if (fieldSizeY - y < WIN_COUNT)     return false;   // если вниз клеток не достаточно
 
         int j = y;
         for (int i = x; i < x + winCount; i++) {
@@ -211,7 +211,7 @@ public class Program {
      * @return
      */
     private static boolean downWinCheck(int x, int y, char c, int winCount) {
-        if (fieldSizeY - y < winCount)     return false;   // если вниз клеток не достаточно
+        if (fieldSizeY - y < WIN_COUNT)     return false;   // если вниз клеток не достаточно
 
         for (int i = y; i < y + winCount; i++) {
             if (field[x][i] != c)   return false;
