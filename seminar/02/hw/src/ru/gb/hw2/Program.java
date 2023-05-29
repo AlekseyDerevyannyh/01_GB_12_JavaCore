@@ -16,16 +16,30 @@ public class Program {
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final Random random = new Random();
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+
     public static void main(String[] args) {
-        initialize();
-        printField();
-        while(true) {
-            humanTurn();
+        while (true){
+            initialize();
             printField();
-            if (checkWin(DOT_HUMAN)) {
-                System.out.println("Игрок победил!");
-                break;
+            while (true){
+                int[] coordinate;
+                coordinate = humanTurn();
+                printField(coordinate[0], coordinate[1]);
+                if (gameCheck(DOT_HUMAN, "Вы победили!")) {
+                    break;
+                }
+                coordinate = aiTurn();
+                System.out.println("Ход ИИ:");
+                printField(coordinate[0], coordinate[1]);
+
+                if (gameCheck(DOT_AI, "ИИ победил!"))
+                    break;
             }
+            System.out.println("Желаете сыграть еще раз? (Y - да)");
+            if (!SCANNER.next().equalsIgnoreCase("Y"))
+                break;
         }
     }
 
@@ -83,6 +97,29 @@ public class Program {
     }
 
     /**
+     * Отрисовка игрового поля c подсветкой символа
+     * @param xColor - координата х подсвечиваемого символа
+     * @param yColor - координата у подсвечиваемого символа
+     */
+    private static void printField(int xColor, int yColor) {
+        printHeader();
+        printDelimiter();
+
+        for (int y = 0; y < fieldSizeY; y ++) {
+            System.out.print(y + 1 + " ");
+            for (int x = 0; x <= fieldSizeX; x ++) {
+                if (x == fieldSizeX)                    System.out.print("│ ");
+                else if (x == xColor && y == yColor)    System.out.print("│ " + ANSI_RED + field[x][y] + ANSI_RESET +" ");
+                else                                    System.out.print("│ " + field[x][y] + " ");
+            }
+            System.out.println(y + 1);
+            printDelimiter();
+        }
+
+        printHeader();
+    }
+
+    /**
      * Проверка, является ли ячейка пустой
      * @param x - координаты ячейки по х
      * @param y - координаты ячейки по у
@@ -105,8 +142,9 @@ public class Program {
 
     /**
      * Обработка хода игрока (человек)
+     * @return - возвращает массив с координатой хода [0] - x, [1] - y
      */
-    private static void humanTurn() {
+    private static int[] humanTurn() {
         int x, y;
         do {
             System.out.printf("Введите координаты хода X и Y (от 1 до %d по X и от 1 до %d по Y) через пробел >>> ",
@@ -115,6 +153,7 @@ public class Program {
             y = SCANNER.nextInt() - 1;
         } while (!isCellValid(x, y) || !isCellEmpty(x, y));
         field[x][y] = DOT_HUMAN;
+        return new int[]{x, y};
     }
 
     /**
@@ -152,7 +191,6 @@ public class Program {
         }
         return true;
     }
-
 
     /**
      * Проверка наличия выйгрыша по диагонали вправо-вниз от текущей клетки
@@ -206,4 +244,52 @@ public class Program {
         return false;
     }
 
+    /**
+     * Проверка на ничью
+     * @return
+     */
+    static boolean checkDraw(){
+        for (int x = 0; x < fieldSizeX; x++){
+            for (int y = 0; y < fieldSizeY; y++)
+                if (isCellEmpty(x, y)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Метод проверки состояния игры
+     * @param c - символ (игрок или ИИ)
+     * @param str - победное сообщение
+     * @return
+     */
+    static boolean gameCheck(char c, String str) {
+        if (checkWin(c)){
+            System.out.println(str);
+            return true;
+        }
+        if (checkDraw()){
+            System.out.println("Ничья!");
+            return true;
+        }
+
+        return false; // Игра продолжается
+    }
+
+    /**
+     * Ход компьютера
+     * @return возвращает массив с координатой хода [0] - x, [1] - y
+     */
+    private static int[] aiTurn() {
+        int x, y;
+        do
+        {
+            x = random.nextInt(fieldSizeX);
+            y = random.nextInt(fieldSizeY);
+        }
+        while (!isCellEmpty(x, y));
+        field[x][y] = DOT_AI;
+//        System.out.println("Ход ИИ:");
+//        printField(x, y);
+        return new int[]{x, y};
+    }
 }
