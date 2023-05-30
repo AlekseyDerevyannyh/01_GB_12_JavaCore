@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Program {
-    private static final int WIN_COUNT = 5;
+    private static final int WIN_COUNT = 4;
     private static final char DOT_HUMAN = 'X';
     private static final char DOT_AI = 'O';
     private static final char DOT_EMPTY = ' ';
@@ -250,7 +250,7 @@ public class Program {
 
     /**
      * Метод проверки состояния игры
-     * @param c - символ (игрок или ИИ)
+     * @param c - символ (игрок, ИИ или пустая клетка)
      * @param str - победное сообщение
      * @return
      */
@@ -265,22 +265,6 @@ public class Program {
         }
         return false; // Игра продолжается
     }
-
-    /**
-     * Ход компьютера
-     * @return возвращает массив с координатой хода [0] - x, [1] - y
-     */
-//    private static int[] aiTurn() {
-//        int x, y;
-//        do
-//        {
-//            x = random.nextInt(fieldSizeX);
-//            y = random.nextInt(fieldSizeY);
-//        }
-//        while (!isCellEmpty(x, y));
-//        field[x][y] = DOT_AI;
-//        return new int[]{x, y};
-//    }
 
     /**
      * Ход компьютера
@@ -330,12 +314,18 @@ public class Program {
         return new int[]{coordinate[0], coordinate[1]};
     }
 
+    /**
+     * Предпроверка победы, используется в алгоритме хода ИИ
+     * @param c - символ (игрок, ИИ или пустая клетка)
+     * @param winCount - число символов для победы
+     * @return
+     */
     private static int[] forecastCheckWin(char c, int winCount) {
         for (int i = 0; i < fieldSizeX; i++) {
             for (int j = 0; j < fieldSizeY; j++) {
                 if (field[i][j] == DOT_EMPTY) {
                     field[i][j] = c;
-                    if (checkWin(c, winCount)) {
+                    if (checkWin(i, j, c, winCount)) {
                         field[i][j] = DOT_EMPTY;
                         return new int[]{i, j};
                     }
@@ -346,15 +336,110 @@ public class Program {
         return null;
     }
 
-    private static boolean checkWin(char c, int winCount) {
-        for (int i = 0; i < fieldSizeX; i++) {
-            for (int j = 0; j < fieldSizeY; j++) {
-                if (rightWinCheck(i, j, c, winCount))     return true;
-                if (downWinCheck(i, j, c, winCount))      return true;
-                if (rightUpWinCheck(i, j, c, winCount))   return true;
-                if (rightDownWinCheck(i, j, c, winCount)) return true;
-            }
-        }
+    /**
+     * Проверка победы относительно переданной координаты, используется в алгоритме хода ИИ
+     * @param x - координаты ячейки по х
+     * @param y - координаты ячейки по у
+     * @param c - символ (игрок, ИИ или пустая клетка)
+     * @param winCount - число символов для победы
+     * @return
+     */
+    private static boolean checkWin(int x, int y, char c, int winCount) {
+        if (horizontalWinCheck(x, y, c, winCount))      return true;
+        if (verticalWinCheck(x, y, c, winCount))        return true;
+        if (diagonalWinCheck(x, y, c, winCount))        return true;
+        if (reverseDiagonalWinCheck(x, y, c, winCount)) return true;
         return false;
     }
+
+    /**
+     * Подготовка к проверке на победу по горизонтали относительно переданной координаты
+     * Производится предварительное смещение влево, если там есть символы  @param c
+     * @param x - координаты ячейки по х
+     * @param y - координаты ячейки по у
+     * @param c - символ (игрок, ИИ или пустая клетка)
+     * @param winCount - число символов для победы
+     * @return
+     */
+    private static boolean horizontalWinCheck(int x, int y, char c, int winCount) {
+        if (x != 0) {
+            for (int i = x; i >= 0; i--) {
+                if (field[i][y] == c)   x = i;
+                else                    break;
+            }
+        }
+        return rightWinCheck(x, y, c, winCount);
+    }
+
+    /**
+     * Подготовка к проверке на победу по вертикали относительно переданной координаты
+     * Производится предварительное смещение вверх, если там есть символы  @param c
+     * @param x - координаты ячейки по х
+     * @param y - координаты ячейки по у
+     * @param c - символ (игрок, ИИ или пустая клетка)
+     * @param winCount - число символов для победы
+     * @return
+     */
+    private static boolean verticalWinCheck(int x, int y, char c, int winCount) {
+        if (y != 0) {
+            for (int i = y; i >= 0; i--) {
+                if (field[x][i] == c)   y = i;
+                else                    break;
+            }
+        }
+        return downWinCheck(x, y, c, winCount);
+    }
+
+    /**
+     * Подготовка к проверке на победу по диагонали относительно переданной координаты
+     * Производится предварительное смещение вверх-влево, если там есть символы  @param c
+     * @param x - координаты ячейки по х
+     * @param y - координаты ячейки по у
+     * @param c - символ (игрок, ИИ или пустая клетка)
+     * @param winCount - число символов для победы
+     * @return
+     */
+    private static boolean diagonalWinCheck(int x, int y, char c, int winCount) {
+        if (y != 0 && x != 0) {
+            int j = y;
+            for (int i = x; i >= 0; i--) {
+                if (j < 0)
+                    break;
+                if (field[i][j] == c) {
+                    x = i;
+                    y = j;
+                } else
+                    break;
+                j--;
+            }
+        }
+        return rightDownWinCheck(x, y, c, winCount);
+    }
+
+    /**
+     * Подготовка к проверке на победу по обратной диагонали относительно переданной координаты
+     * Производится предварительное смещение вниз-влево, если там есть символы  @param c
+     * @param x - координаты ячейки по х
+     * @param y - координаты ячейки по у
+     * @param c - символ (игрок, ИИ или пустая клетка)
+     * @param winCount - число символов для победы
+     * @return
+     */
+    private static boolean reverseDiagonalWinCheck(int x, int y, char c, int winCount) {
+        if (y != fieldSizeY - 1 && x != 0) {
+            int j = y;
+            for (int i = x; i >= 0; i--) {
+                if (j >= fieldSizeY)
+                    break;
+                if (field[i][j] == c) {
+                    x = i;
+                    y = j;
+                } else
+                    break;
+                j++;
+            }
+        }
+        return rightUpWinCheck(x, y, c, winCount);
+    }
+
 }
