@@ -11,6 +11,14 @@ public abstract class Worker {
 
     abstract double avgMonthlySalary();     // расчёт среднемесячной зарплаты
 
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
     public String getFirstName() {
         return firstName;
     }

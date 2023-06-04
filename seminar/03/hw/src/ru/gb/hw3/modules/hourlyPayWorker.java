@@ -13,6 +13,15 @@ public class hourlyPayWorker extends Worker {
         return (double) Math.round(20.8 * 8 * this.hourlyRate * 100) / 100;
     }
 
+    @Override
+    public String toString() {
+        return "hourlyPayWorker{" +
+                "firstName=" + firstName +
+                ", lastName='" + lastName + '\'' +
+                ", hourlyRate='" + hourlyRate + '\'' +
+                '}';
+    }
+
     public double getHourlyRate() {
         return hourlyRate;
     }

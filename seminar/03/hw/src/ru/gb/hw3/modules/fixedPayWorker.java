@@ -13,6 +13,15 @@ public class fixedPayWorker extends Worker {
         return monthlySalary;
     }
 
+    @Override
+    public String toString() {
+        return "fixedPayWorker{" +
+                "firstName=" + firstName +
+                ", lastName='" + lastName + '\'' +
+                ", monthlySalary='" + monthlySalary + '\'' +
+                '}';
+    }
+
     public double getMonthlySalary() {
         return monthlySalary;
     }
