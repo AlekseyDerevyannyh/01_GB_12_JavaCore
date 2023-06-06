@@ -1,9 +1,9 @@
 package ru.gb.hw3.modules;
 
-public class fixedPayWorker extends Worker {
+public class FixedPayWorker extends Worker {
     private double monthlySalary;       // месячная зарплата
 
-    public fixedPayWorker(String name, double monthlySalary) {
+    public FixedPayWorker(String name, double monthlySalary) {
         super(name);
         this.monthlySalary = (double) Math.round(monthlySalary * 100) / 100; // округляем зарплату до двух знаков после запятой
     }
@@ -15,8 +15,8 @@ public class fixedPayWorker extends Worker {
 
     @Override
     public String toString() {
-        return "fixedPayWorker{" +
-                "Name=" + name +
+        return "FixedPayWorker{" +
+                "Name=" + super.getName() +
                 ", MonthlySalary='" + monthlySalary + '\'' +
                 ", Salary='" + this.avgMonthlySalary() + '\'' +
                 '}';

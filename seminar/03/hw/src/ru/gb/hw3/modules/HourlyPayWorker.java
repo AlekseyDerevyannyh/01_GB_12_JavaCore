@@ -1,9 +1,9 @@
 package ru.gb.hw3.modules;
 
-public class hourlyPayWorker extends Worker {
+public class HourlyPayWorker extends Worker {
     private double hourlyRate;      // почасовая ставка
 
-    public hourlyPayWorker(String name, double hourlyRate) {
+    public HourlyPayWorker(String name, double hourlyRate) {
         super(name);
         this.hourlyRate = (double) Math.round(hourlyRate * 100) / 100;  // округляем часовую ставку до 2х знаков после запятой
     }
@@ -15,8 +15,8 @@ public class hourlyPayWorker extends Worker {
 
     @Override
     public String toString() {
-        return "hourlyPayWorker{" +
-                "Name=" + name +
+        return "HourlyPayWorker{" +
+                "Name=" + super.getName() +
                 ", HourlyRate='" + hourlyRate + '\'' +
                 ", Salary='" + this.avgMonthlySalary() + '\'' +
                 '}';

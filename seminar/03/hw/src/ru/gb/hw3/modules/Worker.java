@@ -1,9 +1,7 @@
 package ru.gb.hw3.modules;
 
-import java.util.Comparator;
-
 public abstract class Worker implements Comparable<Worker> {
-    protected String name;
+    private String name;
 
     public Worker(String name) {
         this.name = name;
