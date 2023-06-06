@@ -13,16 +13,12 @@ public class fixedPayWorker extends Worker {
         return monthlySalary;
     }
 
-//    @Override
-//    public int compare(Worker o1, Worker o2) {
-//        return o1.getFirstName().compareTo(o2.getFirstName());
-//    }
-
     @Override
     public String toString() {
         return "fixedPayWorker{" +
                 "Name=" + name +
-                ", monthlySalary='" + monthlySalary + '\'' +
+                ", MonthlySalary='" + monthlySalary + '\'' +
+                ", Salary='" + this.avgMonthlySalary() + '\'' +
                 '}';
     }
 

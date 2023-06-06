@@ -13,16 +13,12 @@ public class hourlyPayWorker extends Worker {
         return (double) Math.round(20.8 * 8 * this.hourlyRate * 100) / 100;
     }
 
-//    @Override
-//    public int compareTo(Worker o1, Worker o2) {
-//        return o1.getName().compareTo(o2.getName());
-//    }
-
     @Override
     public String toString() {
         return "hourlyPayWorker{" +
                 "Name=" + name +
-                ", hourlyRate='" + hourlyRate + '\'' +
+                ", HourlyRate='" + hourlyRate + '\'' +
+                ", Salary='" + this.avgMonthlySalary() + '\'' +
                 '}';
     }
 
