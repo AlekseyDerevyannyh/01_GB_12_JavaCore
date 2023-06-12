@@ -1,4 +1,4 @@
-package ru.gb.hw3;
+package ru.gb.hw4;
 
 public class MyArrayDataException extends Exception {
     private final int row;

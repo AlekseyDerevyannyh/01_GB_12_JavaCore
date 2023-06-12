@@ -1,4 +1,4 @@
-package ru.gb.hw3;
+package ru.gb.hw4;
 
 public class Program {
 
@@ -30,8 +30,8 @@ public class Program {
                 throw new MyArraySizeException("ОШИБКА! Размерность массива не равна 4х4!");
             }
         }
-        int result = 0;
 
+        int result = 0;
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
                 try {

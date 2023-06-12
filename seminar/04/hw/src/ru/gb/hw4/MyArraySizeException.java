@@ -1,4 +1,4 @@
-package ru.gb.hw3;
+package ru.gb.hw4;
 
 public class MyArraySizeException extends Exception {
     public MyArraySizeException(String message) {
