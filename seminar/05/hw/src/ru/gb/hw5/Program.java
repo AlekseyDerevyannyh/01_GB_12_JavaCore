@@ -3,7 +3,6 @@ package ru.gb.hw5;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -12,7 +11,9 @@ public class Program {
     public static final String BACKUP_DIR="/backup";
 
     public static void main(String[] args) {
-        backupAllFilesInDir("C:/Data/tmp1");
+        backupAllFilesInDir(".");
+        System.out.println();
+        Tree.print(new File("."),  "", true);
     }
 
     /**
@@ -24,19 +25,20 @@ public class Program {
         File file = new File(path);
         File[] files = file.listFiles();
 
+        System.out.printf("Backup started from folder '%s' to folder '.%s'\n", file.getPath(), BACKUP_DIR);
         if (files == null) {
-            System.out.println("Путь не найден!");
+            System.out.println("ERROR! Path not found!");
             return;
         }
 
         if (files.length == 0) {
-            System.out.println("Папка пуста! Нет файлов для резервного копирования!");
+            System.out.println("Folder is empty! No files to backup!");
         }
 
         File backupDir = new File(path + BACKUP_DIR);
         if (!backupDir.exists()) {
             if (!backupDir.mkdir()) {
-                System.out.printf("Ошибка создания папки '%s'!\n", BACKUP_DIR);
+                System.out.printf("Error creating folder '%s'!\n", BACKUP_DIR);
                 return;
             }
         }
