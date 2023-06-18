@@ -1,6 +1,8 @@
 package ru.gb.hw5;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -11,18 +13,15 @@ public class Program {
     public static final String BACKUP_DIR="/backup";
 
     public static void main(String[] args) {
+        System.out.println("Задача 1");
+        backupAllFilesInDir(".");
 
-//        backupAllFilesInDir(".");
-//        System.out.println();
-//        Tree.print(new File("."),  "", true);
+        System.out.println("\nЗадача 2");
+        Tree.print(new File("."),  "", true);
+
+        System.out.println("\nЗадача 3");
         int[] array = new int[]{3, 1, 3, 1, 1, 1, 3, 1, 3};
-        int result = arrayToInt(array);
-        System.out.println(Integer.toBinaryString(result));
-
-        System.out.println(Integer.toBinaryString(intTo3Byte(result)[0]));
-        System.out.println(Integer.toBinaryString(intTo3Byte(result)[1]));
-        System.out.println(Integer.toBinaryString(intTo3Byte(result)[2]));
-
+        byteArrayToFile("out.txt", intTo3Byte(arrayToInt(array)));
     }
 
     /**
@@ -120,5 +119,23 @@ public class Program {
             }
         }
         return true;
+    }
+
+    /**
+     * Метод записи в файл массива байт
+     * @param filename - имя файла
+     * @param array - входной массив
+     */
+    public static void byteArrayToFile(String filename, byte[] array) {
+        File file = new File(filename);
+
+        try (FileOutputStream outFile  = new FileOutputStream(file)) {
+            outFile.write(array);
+            System.out.printf("Bytes written to file '%s'\n", file.getName());
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write date to file - " + file.getName());
+        } catch (IOException e) {
+            System.out.println("Error input/output: " + e);
+        }
     }
 }
