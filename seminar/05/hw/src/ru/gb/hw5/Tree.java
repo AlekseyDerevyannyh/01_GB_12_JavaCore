@@ -4,15 +4,15 @@ import java.io.File;
 
 public class Tree {
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_GREEN = "\u001B[32m";
 
     /**
-     * TODO: Доработать метод print, необходимо распечатывать директории и файлы
-     * @param file
-     * @param indent
-     * @param isLast
+     * Метод распечатки дерева каталогов и файлов
+     * Данный метод является рекурсивным, поэтому для его работы нужны дополнительные параметры
+     * @param file - передаём объект File относительно которого будет рисоваться дерево каталогов и файлов
+     * @param indent - отступ для текущей директории или файла (т.е. его графика)
+     * @param isLast - флаг, обозначающий является ли данный каталог или файл последним в родительской папке
      */
     public static void print(File file, String indent, boolean isLast) {
         System.out.print(indent); // рисуем отступ
